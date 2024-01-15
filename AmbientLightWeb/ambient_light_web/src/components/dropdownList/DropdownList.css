@@ -1,0 +1,25 @@
+.dropdown_list {
+  margin-top: 10px;
+}
+
+.select_list {
+  color: #fff;
+}
+
+.option_list_item {
+  color: #000; 
+}
+
+.dropdown {
+  padding: 10px 20px;
+
+  background: none;
+  outline: none;
+  border: none;
+
+  backdrop-filter: blur(40px);
+  border-radius: 10px;
+  box-shadow: 10px 5px 30px rgba(0, 0, 0, 0.2);
+
+  font-size: 15px;
+}

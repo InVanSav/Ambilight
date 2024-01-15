@@ -1,0 +1,50 @@
+.main_setting_items {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.setting_input {
+  border-radius: 15px;
+  border: none;
+  outline: none;
+
+  background: none;
+  color: #fff;
+
+  padding: 10px 15px;
+  box-shadow: 10px 5px 10px rgba(0, 0, 0, 0.2);
+
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.invalid {
+  border: 2px solid red;
+}
+
+@media (max-width: 600px) {
+  .main_setting_items {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .setting_input {
+    border-radius: 15px;
+    border: none;
+    outline: none;
+    background: none;
+    color: #fff;
+    padding: 10px 15px;
+    box-shadow: 10px 5px 10px rgba(0, 0, 0, 0.2);
+    font-weight: 500;
+    font-size: 15px;
+  }
+
+  .invalid {
+    border: 2px solid red;
+  }
+}
