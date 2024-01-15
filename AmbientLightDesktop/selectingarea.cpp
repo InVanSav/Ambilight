@@ -1,32 +1,57 @@
 #include "selectingarea.h"
 
 SelectingArea::SelectingArea(QWidget *parent)
-    : QGroupBox{parent}, p_isSelecting(false) {}
+    : QWidget{parent}, p_isSelecting(false) {}
 
 SelectingArea::SelectingArea(QWidget *parent, DataStorage *data)
-    : QGroupBox{parent}, p_isSelecting(false), p_data(data) {
+    : QWidget{parent}, p_isSelecting(false), p_data(data) {
   p_mainLayout = new QVBoxLayout(this);
   setLayout(p_mainLayout);
+
+  p_primaryScreen = QGuiApplication::primaryScreen()->geometry();
+
+  setFixedHeight(p_primaryScreen.height() - p_yOffset);
+  setFixedWidth(p_primaryScreen.width() - p_xOffset);
+
+  // Рассчитываем отношение размеров SelectingArea к размерам экрана
+  p_widthRatio =
+      static_cast<qreal>(p_primaryScreen.width()) / static_cast<qreal>(width());
+  p_heightRatio = static_cast<qreal>(p_primaryScreen.height()) /
+                  static_cast<qreal>(height());
+
+  auto upperLeftPair = p_data->getUpperLeftPoint();
+  auto lowerRightPair = p_data->getLowerRightPoint();
+
+  QPoint upperLeft(upperLeftPair.first / p_widthRatio,
+                   upperLeftPair.second / p_heightRatio);
+  QPoint lowerRight(
+      lowerRightPair.first / p_widthRatio + upperLeftPair.first,
+      lowerRightPair.second / p_heightRatio + upperLeftPair.second);
+
+  p_startPos = upperLeft;
+  p_endPos = lowerRight;
 }
 
 void SelectingArea::saveSelectionToDataStorage(DataStorage *data) {
   // Проверяем, что наша правая точка больше левой
-  // Иначе они запишутся наоборот, что будет неправильно
   QPoint start = p_startPos.x() < p_endPos.x() ? p_startPos : p_endPos;
   QPoint end = p_startPos.x() < p_endPos.x() ? p_endPos : p_startPos;
 
-  QRect selectedRect = QRect(start, end);
+  // Пересчитываем координаты в координаты экрана
+  QRect selectedRect(
+      QPoint(start.x() * p_widthRatio, start.y() * p_heightRatio),
+      QPoint(end.x() * p_widthRatio - start.x(),
+             end.y() * p_heightRatio - start.y()));
 
-  QPoint globalTopLeft = mapToGlobal(selectedRect.topLeft());
-  QPoint globalBottomRight = mapToGlobal(selectedRect.bottomRight());
+  QPoint globalTopLeft = selectedRect.topLeft();
+  QPoint globalBottomRight = selectedRect.bottomRight();
 
-  data->setUpperLeftPoint(globalTopLeft.x(), globalTopLeft.y() - p_yTopOffset);
-  data->setLowerRightPoint(globalBottomRight.x(),
-                           globalBottomRight.y() + p_yBottomOffset);
+  data->setUpperLeftPoint(globalTopLeft.x(), globalTopLeft.y());
+  data->setLowerRightPoint(globalBottomRight.x(), globalBottomRight.y());
 }
 
 void SelectingArea::paintEvent(QPaintEvent *event) {
-  QGroupBox::paintEvent(event);
+  QWidget::paintEvent(event);
 
   QPainter painter(this);
 
@@ -70,21 +95,19 @@ void SelectingArea::mouseReleaseEvent(QMouseEvent *event) {
 
 // Не работает, исправить
 void SelectingArea::correctCoordinates() {
-  QRect fullSelectingAreaRect = rect();
+  //  if (p_endPos.x() > p_fullSelectingArea.right()) {
+  //    p_endPos.setX(p_fullSelectingArea.right());
+  //  }
 
-  if (p_endPos.x() > fullSelectingAreaRect.right()) {
-    p_endPos.setX(fullSelectingAreaRect.right());
-  }
+  //  if (p_endPos.y() > p_fullSelectingArea.bottom()) {
+  //    p_endPos.setY(p_fullSelectingArea.bottom());
+  //  }
 
-  if (p_endPos.y() > fullSelectingAreaRect.bottom()) {
-    p_endPos.setY(fullSelectingAreaRect.bottom());
-  }
+  //  if (p_startPos.x() < p_fullSelectingArea.left()) {
+  //    p_startPos.setX(p_fullSelectingArea.left());
+  //  }
 
-  if (p_startPos.x() < fullSelectingAreaRect.left()) {
-    p_startPos.setX(fullSelectingAreaRect.left());
-  }
-
-  if (p_startPos.y() < fullSelectingAreaRect.top()) {
-    p_startPos.setY(fullSelectingAreaRect.top());
-  }
+  //  if (p_startPos.y() < p_fullSelectingArea.top()) {
+  //    p_startPos.setY(p_fullSelectingArea.top());
+  //  }
 }

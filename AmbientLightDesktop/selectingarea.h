@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QApplication>
 #include <QGroupBox>
 #include <QMouseEvent>
 #include <QPainter>
@@ -8,7 +9,7 @@
 
 #include "datastorage.h"
 
-class SelectingArea : public QGroupBox {
+class SelectingArea : public QWidget {
   Q_OBJECT
  public:
   explicit SelectingArea(QWidget *parent = nullptr);
@@ -36,6 +37,11 @@ class SelectingArea : public QGroupBox {
 
   bool p_isSelecting;
 
-  int p_yTopOffset = 130;
-  int p_yBottomOffset = 30;
+  QRect p_primaryScreen;
+
+  qreal p_widthRatio;
+  qreal p_heightRatio;
+
+  int p_yOffset = 300;
+  int p_xOffset = 30;
 };
