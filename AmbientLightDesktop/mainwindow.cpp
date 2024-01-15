@@ -4,8 +4,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
   FileHandler *fileHandler = new FileHandler;
   DataStorage *readData = fileHandler->getReadData();
 
-  setMinimumWidth(900);
-  setMinimumHeight(600);
+  QRect screen = QGuiApplication::primaryScreen()->geometry();
+
+  setFixedSize(screen.width(), screen.height());
+  setWindowFlags(Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint);
 
   SettingsArea *settingsArea = new SettingsArea(this, readData);
   settingsArea->setFixedHeight(100);
