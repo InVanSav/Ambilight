@@ -42,7 +42,7 @@ void SettingsArea::validatePort(const QString &text) {
   bool ok;
   int port = text.toInt(&ok);
 
-  if (!(ok && port >= 0 && port >= 65535)) {
+  if (!ok || port <= 0 || port >= 65535) {
     p_portLineEdit->setStyleSheet("color: red;");
     return;
   }
