@@ -93,21 +93,20 @@ void SelectingArea::mouseReleaseEvent(QMouseEvent *event) {
   update();
 }
 
-// Не работает, исправить
+// Все также не работает CHZH
 void SelectingArea::correctCoordinates() {
-  //  if (p_endPos.x() > p_fullSelectingArea.right()) {
-  //    p_endPos.setX(p_fullSelectingArea.right());
-  //  }
+  qDebug() << "Before Correction - StartPos:" << p_startPos
+           << " EndPos:" << p_endPos;
 
-  //  if (p_endPos.y() > p_fullSelectingArea.bottom()) {
-  //    p_endPos.setY(p_fullSelectingArea.bottom());
-  //  }
+  // Ограничиваем координаты в пределах SelectingArea
+  if (p_endPos.x() > width()) p_endPos.setX(width());
 
-  //  if (p_startPos.x() < p_fullSelectingArea.left()) {
-  //    p_startPos.setX(p_fullSelectingArea.left());
-  //  }
+  if (p_endPos.y() > height()) p_endPos.setY(height());
 
-  //  if (p_startPos.y() < p_fullSelectingArea.top()) {
-  //    p_startPos.setY(p_fullSelectingArea.top());
-  //  }
+  if (p_startPos.x() < 0) p_startPos.setX(0);
+
+  if (p_startPos.y() < 0) p_startPos.setY(0);
+
+  qDebug() << "After Correction - StartPos:" << p_startPos
+           << " EndPos:" << p_endPos;
 }
