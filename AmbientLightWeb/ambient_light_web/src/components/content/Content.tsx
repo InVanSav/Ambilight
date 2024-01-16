@@ -8,8 +8,13 @@ import { RGBColor } from "react-color";
 const Content: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState<string>("Ambilight");
   const [selectedColor, setSelectedColor] = useState<string>("#ffffff");
+
   const [ip, setIp] = useState<string>("");
   const [port, setPort] = useState<string>("");
+
+  const [isOn, setIsOn] = useState<boolean>(true);
+  const [isInverted, setIsInverted] = useState<boolean>(true);
+  const [sliderValue, setSliderValue] = useState<number>(50);
 
   const handleIpChange = (value: string, isValid: boolean) => {
     setIp(value);
@@ -31,6 +36,22 @@ const Content: React.FC = () => {
     setSelectedColor(color.hex);
   };
 
+  const handleCheckboxChange = (checkboxType: string) => {
+    if (checkboxType === "onOff") {
+      setIsOn(!isOn);
+      console.log(`On/off checkbox is now ${!isOn}`);
+    } else if (checkboxType === "invert") {
+      setIsInverted(!isInverted);
+      console.log(`Invert checkbox is now ${!isInverted}`);
+    }
+  };
+
+  const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(event.target.value, 10);
+    setSliderValue(value);
+    console.log(`Slider Value: ${value}`);
+  };
+
   const handleSendData = () => {
     console.log("Sending data:", {
       ip,
@@ -47,23 +68,59 @@ const Content: React.FC = () => {
           onIpChange={handleIpChange}
           onPortChange={handlePortChange}
         />
-        <DropdownList onItemSelected={handleDropdownChange} />
-        <div className="main_setting_items">
-          {selectedItem === "Static color" && (
-            <div className="color_picker_container">
-              <ColorPicker color={selectedColor} onChange={handleColorChange} />
-              <div className="color_fields">
-                <div>Selected color</div>
-                <div className="color_field">{selectedColor}</div>
-                <div className="color_field">
-                  {convertColorToRGB(selectedColor)}
+        <div className="setting_container">
+          <label className="label_container label">
+            <div className="slider_value">Brightness: {sliderValue}</div>
+            <input
+              type="range"
+              min={0}
+              max={100}
+              step={1}
+              value={sliderValue}
+              onChange={handleSliderChange}
+            />
+          </label>
+          <div className="container_selecting">
+            <div className="selecting_checkboxes">
+              <label className="label_container_checkboxes label">
+                <div>On/off</div>
+                <input
+                  type="checkbox"
+                  checked={isOn}
+                  onChange={() => handleCheckboxChange("onOff")}
+                />
+              </label>
+              <label className="label_container_checkboxes label">
+                <div>Invert</div>
+                <input
+                  type="checkbox"
+                  checked={isInverted}
+                  onChange={() => handleCheckboxChange("invert")}
+                />
+              </label>
+            </div>
+            <DropdownList onItemSelected={handleDropdownChange} />
+          </div>
+          <div className="main_setting_items">
+            {selectedItem === "Static color" && (
+              <div className="color_picker_container">
+                <ColorPicker
+                  color={selectedColor}
+                  onChange={handleColorChange}
+                />
+                <div className="color_fields">
+                  <div>Selected color</div>
+                  <div className="color_field">{selectedColor}</div>
+                  <div className="color_field">
+                    {convertColorToRGB(selectedColor)}
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-          {selectedItem === "Ambilight" && (
-            <div className="ambilight_container">Тут должно быть что-то</div>
-          )}
+            )}
+            {selectedItem === "Ambilight" && (
+              <div className="ambilight_container">Тут должно быть что-то</div>
+            )}
+          </div>
         </div>
         <button className="send_button" onClick={handleSendData}>
           Submit

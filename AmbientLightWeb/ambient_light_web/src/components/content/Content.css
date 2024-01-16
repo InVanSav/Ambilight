@@ -80,6 +80,44 @@
   transition: all 0.2s;
 }
 
+.setting_container {
+  margin: 10px auto;
+  display: grid;
+  align-items: center;
+
+  row-gap: 20px;
+}
+
+.container_selecting {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  column-gap: 20px;
+}
+
+.selecting_checkboxes {
+  display: grid;
+  justify-content: space-between;
+  align-items: end;
+}
+
+.label_container {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+
+  row-gap: 20px;
+}
+
+.label_container_checkboxes {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  column-gap: 5px;
+}
+
 @media (max-width: 600px) {
   .content {
     margin: 0 auto;
