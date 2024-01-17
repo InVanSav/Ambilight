@@ -66,37 +66,6 @@ const Content: React.FC = () => {
     <div className="content">
       <div className="content_main">
         <div className="setting_container">
-          <div className="container_checkboxes">
-            <div className="selecting_checkboxes">
-              <label className="label_container_checkboxes label">
-                <div>On/off</div>
-                <input
-                  type="checkbox"
-                  checked={isOn}
-                  onChange={() => handleCheckboxChange("onOff")}
-                />
-              </label>
-              <label className="label_container_checkboxes label">
-                <div>Invert</div>
-                <input
-                  type="checkbox"
-                  checked={isInverted}
-                  onChange={() => handleCheckboxChange("invert")}
-                />
-              </label>
-            </div>
-            <label className="label_container label">
-              <div className="slider_value">Brightness: {sliderValue}</div>
-              <input
-                type="range"
-                min={0}
-                max={100}
-                step={1}
-                value={sliderValue}
-                onChange={handleSliderChange}
-              />
-            </label>
-          </div>
           <div
             className={`container_selecting ${
               showServerSettings ? "container_after" : ""
@@ -107,7 +76,10 @@ const Content: React.FC = () => {
                 className="server_settings_button"
                 onClick={() => setShowServerSettings(!showServerSettings)}
               >
-                Server settings
+                <div className="server_settings_text">
+                  <div>Server settings</div>
+                  <img className="img_down_arrow" alt="Down Arrow" />
+                </div>
               </button>
               {showServerSettings && (
                 <div className="server_settings">
@@ -117,6 +89,37 @@ const Content: React.FC = () => {
                   />
                 </div>
               )}
+            </div>
+            <div className="container_checkboxes">
+              <div className="selecting_checkboxes">
+                <label className="label_container_checkboxes label">
+                  <div>On/off</div>
+                  <input
+                    type="checkbox"
+                    checked={isOn}
+                    onChange={() => handleCheckboxChange("onOff")}
+                  />
+                </label>
+                <label className="label_container_checkboxes label">
+                  <div>Invert</div>
+                  <input
+                    type="checkbox"
+                    checked={isInverted}
+                    onChange={() => handleCheckboxChange("invert")}
+                  />
+                </label>
+              </div>
+              <label className="label_container label">
+                <div className="slider_value">Brightness: {sliderValue}</div>
+                <input
+                  type="range"
+                  min={0}
+                  max={100}
+                  step={1}
+                  value={sliderValue}
+                  onChange={handleSliderChange}
+                />
+              </label>
             </div>
             <DropdownList onItemSelected={handleDropdownChange} />
           </div>

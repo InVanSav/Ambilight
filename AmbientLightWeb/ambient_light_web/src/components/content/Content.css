@@ -75,6 +75,20 @@
   transition: all 0.2s;
 }
 
+.img_down_arrow {
+  content: url("../../assets/down_arrow.png");
+  width: 24px;
+  height: 24px;
+}
+
+.server_settings_text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  column-gap: 5px;
+}
+
 .send_button:hover {
   box-shadow: 10px 5px 30px rgba(0, 0, 0, 0.5);
   transition: all 0.2s;
@@ -114,6 +128,7 @@
   justify-content: center;
 
   column-gap: 20px;
+  margin-top: 10px;
 }
 
 .container_selecting {
