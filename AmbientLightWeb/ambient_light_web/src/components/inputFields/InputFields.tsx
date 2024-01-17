@@ -16,12 +16,14 @@ const InputFields: React.FC<InputFieldsProps> = ({
   const [portValid, setPortValid] = useState<boolean>(true);
 
   const validateIp = (value: string): boolean => {
-    return /^(\d{1,3}\.){3}\d{1,3}$/.test(value);
+    const ipRegex =
+      /^(192\.168\.\d{1,3}(\.\d{1,3})?|10(\.\d{1,3}){3}|172\.(1[6-9]|2[0-9]|3[0-1])\.\d{1,3}(\.\d{1,3})?)$/;
+    return ipRegex.test(value);
   };
 
   const validatePort = (value: string): boolean => {
     const portNumber = parseInt(value, 10);
-    return !isNaN(portNumber) && portNumber >= 0 && portNumber <= 65535;
+    return !isNaN(portNumber) && portNumber >= 49152 && portNumber <= 65535;
   };
 
   const handleIpChange = (event: ChangeEvent<HTMLInputElement>) => {
