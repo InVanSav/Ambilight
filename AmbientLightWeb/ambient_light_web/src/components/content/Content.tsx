@@ -66,30 +66,7 @@ const Content: React.FC = () => {
     <div className="content">
       <div className="content_main">
         <div className="setting_container">
-          <div
-            className={`container_selecting ${
-              showServerSettings ? "container_after" : ""
-            }`}
-          >
-            <div className="hidden_buttons">
-              <button
-                className="server_settings_button"
-                onClick={() => setShowServerSettings(!showServerSettings)}
-              >
-                <div className="server_settings_text">
-                  <div>Server settings</div>
-                  <img className="img_down_arrow" alt="Down Arrow" />
-                </div>
-              </button>
-              {showServerSettings && (
-                <div className="server_settings">
-                  <InputFields
-                    onIpChange={handleIpChange}
-                    onPortChange={handlePortChange}
-                  />
-                </div>
-              )}
-            </div>
+          <div className="container_selecting">
             <div className="container_checkboxes">
               <div className="selecting_checkboxes">
                 <label className="label_container_checkboxes label">
@@ -143,6 +120,25 @@ const Content: React.FC = () => {
               <div className="ambilight_container"></div>
             )}
           </div>
+        </div>
+        <div className="hidden_buttons">
+          <button
+            className="server_settings_button"
+            onClick={() => setShowServerSettings(!showServerSettings)}
+          >
+            <div className="server_settings_text">
+              <div>Server settings</div>
+              <img className="img_down_arrow" alt="Down Arrow" />
+            </div>
+          </button>
+          {showServerSettings && (
+            <div className="server_settings">
+              <InputFields
+                onIpChange={handleIpChange}
+                onPortChange={handlePortChange}
+              />
+            </div>
+          )}
         </div>
         <button className="send_button" onClick={handleSendData}>
           Submit
