@@ -13,9 +13,13 @@ code {
 }
 
 #root {
-  background-image: url("assets/background.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
+  background: linear-gradient(
+    90deg,
+    rgba(174, 129, 149, 1) 0%,
+    rgba(138, 118, 140, 1) 42%,
+    rgba(98, 122, 151, 1) 100%,
+    rgba(98, 122, 151, 1) 129%
+  );
 
   overflow-x: hidden;
 
