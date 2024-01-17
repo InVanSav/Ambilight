@@ -5,24 +5,41 @@ import ColorPicker from "../colorPicker/ColorPicker";
 import "./Content.css";
 import { RGBColor } from "react-color";
 
+interface Mode {
+  code: number;
+  body: string;
+}
+
+interface RequestData {
+  active: boolean;
+  inverse: boolean;
+  brightness: number;
+  mode: Mode;
+}
+
 const Content: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState<string>("Ambilight");
   const [selectedColor, setSelectedColor] = useState<string>("#ffffff");
   const [showServerSettings, setShowServerSettings] = useState<boolean>(false);
 
   const [ip, setIp] = useState<string>("");
+  const [isIpValid, setIsIpValid] = useState<boolean>(false);
+
   const [port, setPort] = useState<string>("");
+  const [isPortValid, setIsPortValid] = useState<boolean>(false);
 
   const [isOn, setIsOn] = useState<boolean>(true);
   const [isInverted, setIsInverted] = useState<boolean>(true);
   const [sliderValue, setSliderValue] = useState<number>(50);
 
   const handleIpChange = (value: string, isValid: boolean) => {
+    setIsIpValid(isValid);
     setIp(value);
     console.log(`IP: ${value}, isValid: ${isValid}`);
   };
 
   const handlePortChange = (value: string, isValid: boolean) => {
+    setIsPortValid(isValid);
     setPort(value);
     console.log(`Port: ${value}, isValid: ${isValid}`);
   };
@@ -53,13 +70,40 @@ const Content: React.FC = () => {
     console.log(`Slider Value: ${value}`);
   };
 
-  const handleSendData = () => {
-    console.log("Sending data:", {
-      ip,
-      port,
-      color: selectedColor,
-    });
-    // Логика для отправки данных
+  const handleSendData = async () => {
+    if (!isIpValid || !isPortValid) return;
+
+    const requestData: RequestData = {
+      active: isOn,
+      inverse: isInverted,
+      brightness: sliderValue,
+      mode: {
+        code: selectedItem === "Static color" ? 110 : 100,
+        body: selectedItem === "Static color" ? selectedColor : "",
+      },
+    };
+
+    console.log(requestData);
+
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestData),
+    };
+
+    try {
+      const response = await fetch(`http://${ip}:${port}`, requestOptions);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      console.log("Data sent successfully!");
+    } catch (error) {
+      console.error("Error sending data:", error);
+    }
   };
 
   return (
