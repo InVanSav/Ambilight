@@ -1,4 +1,3 @@
-// DropdownList.tsx
 import React, { useState } from "react";
 import "./DropdownList.css";
 

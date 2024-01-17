@@ -8,6 +8,7 @@ import { RGBColor } from "react-color";
 const Content: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState<string>("Ambilight");
   const [selectedColor, setSelectedColor] = useState<string>("#ffffff");
+  const [showServerSettings, setShowServerSettings] = useState<boolean>(false);
 
   const [ip, setIp] = useState<string>("");
   const [port, setPort] = useState<string>("");
@@ -64,23 +65,8 @@ const Content: React.FC = () => {
   return (
     <div className="content">
       <div className="content_main">
-        <InputFields
-          onIpChange={handleIpChange}
-          onPortChange={handlePortChange}
-        />
         <div className="setting_container">
-          <label className="label_container label">
-            <div className="slider_value">Brightness: {sliderValue}</div>
-            <input
-              type="range"
-              min={0}
-              max={100}
-              step={1}
-              value={sliderValue}
-              onChange={handleSliderChange}
-            />
-          </label>
-          <div className="container_selecting">
+          <div className="container_checkboxes">
             <div className="selecting_checkboxes">
               <label className="label_container_checkboxes label">
                 <div>On/off</div>
@@ -98,6 +84,39 @@ const Content: React.FC = () => {
                   onChange={() => handleCheckboxChange("invert")}
                 />
               </label>
+            </div>
+            <label className="label_container label">
+              <div className="slider_value">Brightness: {sliderValue}</div>
+              <input
+                type="range"
+                min={0}
+                max={100}
+                step={1}
+                value={sliderValue}
+                onChange={handleSliderChange}
+              />
+            </label>
+          </div>
+          <div
+            className={`container_selecting ${
+              showServerSettings ? "container_after" : ""
+            }`}
+          >
+            <div className="hidden_buttons">
+              <button
+                className="server_settings_button"
+                onClick={() => setShowServerSettings(!showServerSettings)}
+              >
+                Server settings
+              </button>
+              {showServerSettings && (
+                <div className="server_settings">
+                  <InputFields
+                    onIpChange={handleIpChange}
+                    onPortChange={handlePortChange}
+                  />
+                </div>
+              )}
             </div>
             <DropdownList onItemSelected={handleDropdownChange} />
           </div>
@@ -118,7 +137,7 @@ const Content: React.FC = () => {
               </div>
             )}
             {selectedItem === "Ambilight" && (
-              <div className="ambilight_container">Тут должно быть что-то</div>
+              <div className="ambilight_container"></div>
             )}
           </div>
         </div>

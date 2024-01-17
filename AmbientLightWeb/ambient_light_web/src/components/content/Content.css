@@ -88,12 +88,44 @@
   row-gap: 20px;
 }
 
-.container_selecting {
+.hidden_buttons {
+  display: grid;
+  align-items: center;
+  justify-content: center;
+
+  row-gap: 20px;
+}
+
+.server_settings_button {
+  color: #fff;
+  background: none;
+  border: none;
+  backdrop-filter: blur(40px);
+  box-shadow: 10px 5px 30px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+
+  padding: 10px 20px;
+  font-size: 15px;
+}
+
+.container_checkboxes {
   display: flex;
+  align-items: center;
+  justify-content: center;
+
+  column-gap: 20px;
+}
+
+.container_selecting {
+  display: grid;
   justify-content: center;
   align-items: center;
 
   column-gap: 20px;
+}
+
+.container_after {
+  row-gap: 20px;
 }
 
 .selecting_checkboxes {
@@ -129,14 +161,14 @@
     box-shadow: 10px 5px 30px rgba(0, 0, 0, 0);
     border-radius: 15px;
     background: none;
-    width: 90%; 
+    width: 90%;
     margin: 20px auto;
     padding: 10px;
     row-gap: 20px;
   }
 
   .color_picker_container {
-    flex-direction: column; 
+    flex-direction: column;
     row-gap: 20px;
   }
 
@@ -146,11 +178,11 @@
   }
 
   .color_field {
-    width: 100%; 
+    width: 100%;
   }
 
   .send_button {
-    width: 100%; 
+    width: 100%;
     margin-top: 10px;
   }
 }
