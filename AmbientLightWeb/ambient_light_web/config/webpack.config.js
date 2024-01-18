@@ -44,9 +44,6 @@ const babelRuntimeRegenerator = require.resolve('@babel/runtime/regenerator', {
   paths: [babelRuntimeEntry],
 });
 
-const HTMLInlineCSSWebpackPlugin = require('html-inline-css-webpack-plugin').default;
-const HtmlInlineScriptPlugin = require('html-inline-script-webpack-plugin');
-
 // Some apps do not need the benefits of saving a web request, so not inlining the chunk
 // makes for a smoother build process.
 const shouldInlineRuntimeChunk = process.env.INLINE_RUNTIME_CHUNK !== 'false';
@@ -598,12 +595,6 @@ module.exports = function (webpackEnv) {
       isEnvProduction &&
         shouldInlineRuntimeChunk &&
         new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime-.+[.]js/]),
-      isEnvProduction &&
-        shouldInlineRuntimeChunk &&
-        new HTMLInlineCSSWebpackPlugin(),
-      isEnvProduction &&
-        shouldInlineRuntimeChunk &&
-        new HtmlInlineScriptPlugin(),
       // Makes some environment variables available in index.html.
       // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
       // <link rel="icon" href="%PUBLIC_URL%/favicon.ico">
