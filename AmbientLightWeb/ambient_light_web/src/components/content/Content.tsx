@@ -1,48 +1,43 @@
-import React, { useState } from "react";
-import InputFields from "../inputFields/InputFields";
+import React, { useEffect, useState } from "react";
 import DropdownList from "../dropdownList/DropdownList";
 import ColorPicker from "../colorPicker/ColorPicker";
 import "./Content.css";
 import { RGBColor } from "react-color";
-
-interface Mode {
-  code: number;
-  body: string;
-}
-
-interface RequestData {
-  active: boolean;
-  inverse: boolean;
-  brightness: number;
-  mode: Mode;
-}
+import { RequestData } from "../../types/common";
+import { fetchData, postData } from "../../repositories/Repository";
 
 const Content: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState<string>("Ambilight");
   const [selectedColor, setSelectedColor] = useState<string>("#ffffff");
-  const [showServerSettings, setShowServerSettings] = useState<boolean>(false);
-
-  const [ip, setIp] = useState<string>("");
-  const [isIpValid, setIsIpValid] = useState<boolean>(false);
-
-  const [port, setPort] = useState<string>("");
-  const [isPortValid, setIsPortValid] = useState<boolean>(false);
 
   const [isOn, setIsOn] = useState<boolean>(true);
   const [isInverted, setIsInverted] = useState<boolean>(true);
   const [sliderValue, setSliderValue] = useState<number>(50);
 
-  const handleIpChange = (value: string, isValid: boolean) => {
-    setIsIpValid(isValid);
-    setIp(value);
-    console.log(`IP: ${value}, isValid: ${isValid}`);
-  };
+  const url = window.location.href;
+  console.log(url);
 
-  const handlePortChange = (value: string, isValid: boolean) => {
-    setIsPortValid(isValid);
-    setPort(value);
-    console.log(`Port: ${value}, isValid: ${isValid}`);
-  };
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const responseData = await fetchData("getData");
+
+        setSelectedItem(
+          responseData.mode.code === 110 ? "Static color" : "Ambilight"
+        );
+        setSelectedColor(responseData.mode.body);
+        setIsOn(responseData.active);
+        setIsInverted(responseData.inverse);
+        setSliderValue(responseData.brightness);
+
+        console.log("Data received successfully!");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    getData();
+  }, []);
 
   const handleDropdownChange = (selectedItem: string) => {
     console.log(`Selected Item: ${selectedItem}`);
@@ -70,9 +65,17 @@ const Content: React.FC = () => {
     console.log(`Slider Value: ${value}`);
   };
 
-  const handleSendData = async () => {
-    if (!isIpValid || !isPortValid) return;
+  const handleReset = async () => {
+    try {
+      await postData("reset", {});
 
+      console.log("Wi-fi reset successfully!");
+    } catch (error) {
+      console.error("Error wi-fi reset:", error);
+    }
+  };
+
+  const handleSendData = async () => {
     const requestData: RequestData = {
       active: isOn,
       inverse: isInverted,
@@ -85,20 +88,8 @@ const Content: React.FC = () => {
 
     console.log(requestData);
 
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestData),
-    };
-
     try {
-      const response = await fetch(`http://${ip}:${port}`, requestOptions);
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
+      await postData("confirm", requestData);
 
       console.log("Data sent successfully!");
     } catch (error) {
@@ -165,28 +156,14 @@ const Content: React.FC = () => {
             )}
           </div>
         </div>
-        <div className="hidden_buttons">
-          <button
-            className="server_settings_button"
-            onClick={() => setShowServerSettings(!showServerSettings)}
-          >
-            <div className="server_settings_text">
-              <div>Server settings</div>
-              <img className="img_down_arrow" alt="Down Arrow" />
-            </div>
+        <div className="buttons_container">
+          <button className="button reset" onClick={handleReset}>
+            Reset
           </button>
-          {showServerSettings && (
-            <div className="server_settings">
-              <InputFields
-                onIpChange={handleIpChange}
-                onPortChange={handlePortChange}
-              />
-            </div>
-          )}
+          <button className="button send" onClick={handleSendData}>
+            Submit
+          </button>
         </div>
-        <button className="send_button" onClick={handleSendData}>
-          Submit
-        </button>
       </div>
     </div>
   );
